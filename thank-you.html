@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Payment Successful — Gmail Smart Draft Pro</title>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX', { debug_mode: true });
+  </script>
+
+  <meta name="description" content="Payment successful. Your Gmail Smart Draft lifetime license is on its way." />
+  <style>
+    :root{ --bg:#0b1220; --card:#0f1528; --text:#e6edf3; --muted:#93a2b7; --line:#263248; --accent:#1a73e8; --ok:#3fb950; }
+    *{box-sizing:border-box}
+    body{font:16px/1.6 -apple-system,system-ui,Segoe UI,Roboto,Arial;margin:0;background:var(--bg);color:var(--text)}
+    .wrap{max-width:860px;margin:0 auto;padding:36px 18px}
+    h1{margin:0 0 10px;font-size:28px}
+    p.muted{color:var(--muted)}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin:14px 0}
+    .btn{display:inline-block;padding:12px 16px;border-radius:10px;text-decoration:none;color:#fff;background:var(--accent);margin:10px 10px 0 0}
+    .btn.secondary{background:#384457}
+    .btn.success{background:var(--ok); color:#0a0f18}
+    .badge{display:inline-flex;align-items:center;gap:8px;background:#0f1a33;border:1px solid #223257;color:#b5c2d6;padding:8px 12px;border-radius:12px;font-size:14px}
+    .codebox{background:#11182c;border:1px solid #24314b;color:#dfe7f5;border-radius:10px;padding:10px 12px;font-family:ui-monospace,Menlo,Consolas,monospace}
+    ol{padding-left:22px;margin:10px 0}
+    small, a{color:#93a2b7}
+    a:hover{color:#fff}
+    .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <span class="badge">✅ Payment Successful</span>
+    <h1>Lifetime Access Secured</h1>
+    <p class="muted">Thank you for your purchase. Your Pro license email is on its way.</p>
+
+    <div class="card">
+      <h2 style="margin:0 0 8px;">What happens next</h2>
+      <div class="grid">
+        <div><b>1) Check your email</b><p>We’ll send your license key and activation steps to your inbox.</p></div>
+        <div><b>2) Activate the key</b><p>Open the extension → <b>License</b> → paste the key → <b>Activate</b>.</p></div>
+        <div><b>3) You’re Pro</b><p>Unlimited drafts, one-click insert, and lifetime updates.</p></div>
+      </div>
+
+      <div class="codebox" id="orderBox" style="margin-top:10px;">
+        <div>Amount: <b><span id="amt">₹399</span></b> · Reference: <span id="ref">pending</span></div>
+      </div>
+
+      <div style="margin-top:12px;">
+        <a id="btnClaim" class="btn success" target="_blank" rel="noopener">Claim your license</a>
+        <a class="btn" href="https://chromewebstore.google.com/detail/YOUR-EXTENSION-ID" target="_blank" rel="noopener">Install / Open extension</a>
+        <a class="btn secondary" href="https://YOUR-GITHUB-USERNAME.github.io/gmail-site/" target="_blank" rel="noopener">Setup guide</a>
+      </div>
+      <p id="claimNote" class="muted" style="margin-top:8px;display:none;">To claim a license, open this page from your Razorpay success redirect.</p>
+    </div>
+
+    <div class="card">
+      <h2 style="margin:0 0 8px;">Need help?</h2>
+      <p class="muted">Write to <a href="mailto:gmailsmartdraft@gmail.com">gmailsmartdraft@gmail.com</a>.</p>
+    </div>
+
+    <small>© 2025 Gmail Smart Draft · Digital software license (no physical goods).</small>
+  </div>
+
+  <script>
+    // Parse Razorpay query params (fallback to defaults)
+    const qs = new URLSearchParams(location.search);
+    const ref = qs.get('ref') || qs.get('payment_id') || ('web-' + Date.now());
+    const amountParam = qs.get('amount');
+    const currency = (qs.get('currency') || 'INR').toUpperCase();
+    const paymentId = (qs.get('payment_id') || '').trim();
+
+    let value = 399;
+    if (amountParam && !isNaN(amountParam)) {
+      const num = Number(amountParam);
+      value = num >= 10000 ? Math.round(num/100) : Math.round(num);
+      if (value <= 0) value = 399;
+    }
+    document.getElementById('ref').textContent = ref;
+    document.getElementById('amt').textContent =
+      (currency === 'INR' ? '₹' : '') + value.toLocaleString() + (currency !== 'INR' ? (' ' + currency) : '');
+
+    // Claim button → Google Form (prefill), but only if a valid payment_id is present
+    const FORM_URL = "https://docs.google.com/forms/d/e/YOUR-FORM-ID/viewform?usp=dialog";
+    const claim = document.getElementById('btnClaim');
+    const note = document.getElementById('claimNote');
+
+    if (paymentId && /^pay_/i.test(paymentId)) {
+      const sep = FORM_URL.includes('?') ? '&' : '?';
+      claim.href = FORM_URL + sep +
+        "payment_id=" + encodeURIComponent(paymentId) +
+        "&ref=" + encodeURIComponent(ref) +
+        "&amount=" + encodeURIComponent(value) +
+        "&currency=" + encodeURIComponent(currency);
+      claim.addEventListener('click', () => window.gtag && gtag('event','cta_click',{cta_kind:'claim_license', transaction_id:ref}));
+      claim.style.display = "";
+    } else {
+      claim.style.display = "none";
+      note.style.display = "";
+    }
+
+    // GA4 purchase ping (once per reference)
+    try {
+      const key = 'ty_fired_' + ref;
+      if (!sessionStorage.getItem(key)) {
+        if (window.gtag) {
+          gtag('event', 'purchase_complete', { value:value, currency:currency, transaction_id:ref, debug_mode:true });
+        }
+        sessionStorage.setItem(key, '1');
+      }
+    } catch {}
+  </script>
+</body>
+</html>
