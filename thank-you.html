@@ -54,6 +54,7 @@
 
       <div style="margin-top:12px;">
         <a id="btnClaim" class="btn success" target="_blank" rel="noopener">Claim your license</a>
+        <!-- Replace YOUR-EXTENSION-ID once available -->
         <a class="btn" href="https://chromewebstore.google.com/detail/YOUR-EXTENSION-ID" target="_blank" rel="noopener">Install / Open extension</a>
         <a class="btn secondary" href="https://devopsviji02-png.github.io/GSD-Site/" target="_blank" rel="noopener">Setup guide</a>
       </div>
@@ -87,12 +88,12 @@
       (currency === 'INR' ? '₹' : '') + value.toLocaleString() + (currency !== 'INR' ? (' ' + currency) : '');
 
     // Claim button → Google Form (public link)
-    const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScHOJAMQjDfe_CRF4saHmWbV4WpTUPjgNz3jVR8paVjwdwWlg/viewform?usp=header";
+    const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScHOJAMQjDfe_CRF4saHmWbV4WpTUPjgNz3jVR8paVjwdwWlg/viewform";
     const claim = document.getElementById('btnClaim');
     const note = document.getElementById('claimNote');
 
     if (paymentId && /^pay_/i.test(paymentId)) {
-      claim.href = FORM_URL;
+      claim.href = FORM_URL; // open form; you can swap to a prefilled URL later
       claim.addEventListener('click', () => window.gtag && gtag('event','cta_click',{cta_kind:'claim_license', transaction_id:ref}));
       claim.style.display = "";
     } else {
