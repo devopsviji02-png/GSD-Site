@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Gmail Smart Draft – AI Chrome Extension</title>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX', { debug_mode: true });
+  </script>
+
+  <meta name="description" content="AI Chrome extension that drafts professional Gmail emails in seconds. Privacy-first. Buy a lifetime license via Razorpay." />
+  <meta property="og:title" content="Gmail Smart Draft – AI Chrome Extension" />
+  <meta property="og:description" content="Write better emails 10x faster. Privacy-first, no server. Lifetime license available." />
+  <style>
+    body{font:16px/1.5 system-ui,Segoe UI,Roboto,Arial;margin:0;background:#0b1220;color:#e6edf3}
+    .wrap{max-width:920px;margin:0 auto;padding:40px 20px}
+    h1{font-size:32px;margin:0 0 10px}
+    .card{background:#0f1528;border:1px solid #263248;border-radius:14px;padding:20px;margin:16px 0}
+    .btn{display:inline-block;padding:12px 18px;border-radius:10px;text-decoration:none;color:#fff;background:#1a73e8;margin-right:8px}
+    .btn.ok{background:#3fb950;color:#0a0f18}
+    .muted{color:#93a2b7}
+    .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+    small, a{color:#93a2b7}
+    a:hover{color:#fff}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Gmail Smart Draft</h1>
+    <p class="muted">AI Chrome extension that drafts professional Gmail emails in seconds. Runs locally—no server.</p>
+
+    <div class="grid">
+      <div class="card"><b>Generate</b><br>One-click drafts from your context & tone.</div>
+      <div class="card"><b>Insert</b><br>Auto-inserts into Gmail’s composer.</div>
+      <div class="card"><b>Privacy-first</b><br>No account required. Your OpenAI key stays in your browser.</div>
+    </div>
+
+    <div class="card">
+      <h2>Pricing</h2>
+      <p id="priceLine"><b>Lifetime license</b></p>
+      <p>
+        <a id="btnBuy" class="btn" target="_blank" rel="noopener noreferrer">Buy Lifetime</a>
+        <a id="btnInstall" class="btn ok" target="_blank" rel="noopener noreferrer"
+           href="https://chromewebstore.google.com/detail/YOUR-EXTENSION-ID">Install from Chrome Web Store</a>
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>Policies</h2>
+      <p>
+        <a href="/gmail-site/terms.html">Terms &amp; Conditions</a>
+        ·
+        <a href="/gmail-site/shipping.html">Shipping / Delivery Policy</a>
+        ·
+        <a href="/gmail-site/contact.html">Contact Us</a>
+        ·
+        <a href="/gmail-site/privacy.html">Privacy Policy</a>
+      </p>
+    </div>
+
+    <small>© 2025 Gmail Smart Draft · Digital software license (no physical goods).</small>
+  </div>
+
+  <script>
+    // Live Razorpay Payment Links (update to your pages)
+    const INR_LINK = 'https://rzp.io/rzp/gmail-assistant-in';
+    const USD_LINK = 'https://rzp.io/rzp/gmail-assistant-usd';
+
+    function likelyIndia(){
+      try {
+        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+        const lang = (navigator.language || '').toLowerCase();
+        return tz.includes('Kolkata') || lang.endsWith('-in') || lang === 'hi' || lang === 'en-in';
+      } catch { return false; }
+    }
+
+    const buy = document.getElementById('btnBuy');
+    const priceLine = document.getElementById('priceLine');
+    const inIndia = likelyIndia();
+
+    if (inIndia) {
+      buy.href = INR_LINK;
+      buy.textContent = 'Buy Lifetime (₹399)';
+      priceLine.innerHTML = '<b>Lifetime license:</b> ₹399 (India)';
+      buy.addEventListener('click', () => window.gtag && gtag('event','cta_click',{cta_kind:'buy_lifetime_inr_399', value:399, currency:'INR'}));
+    } else {
+      buy.href = USD_LINK;
+      buy.textContent = 'Buy Lifetime ($4.99)';
+      priceLine.innerHTML = '<b>Lifetime license:</b> $4.99 (International)';
+      buy.addEventListener('click', () => window.gtag && gtag('event','cta_click',{cta_kind:'buy_lifetime_usd_4_99', value:4.99, currency:'USD'}));
+    }
+
+    document.getElementById('btnInstall')?.addEventListener('click', function(){
+      window.gtag && gtag('event','cta_click', { cta_kind:'install_chrome_webstore', link_url:this.href });
+    });
+  </script>
+</body>
+</html>
